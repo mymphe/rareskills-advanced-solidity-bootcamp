@@ -51,7 +51,7 @@ contract UntrustedEscrow {
 
         Escrow memory escrow = getEscrow(from, msg.sender, token);
         require(escrow.id == escrowId, "Escrow does not exist or withdrawn");
-        require(escrow.timestamp + escrow.timelock >= block.timestamp, "Too early to withdraw");
+        require(block.timestamp >= escrow.timestamp + escrow.timelock, "Too early to withdraw");
         delete escrows[escrow.id];
 
         IERC20(escrow.token).safeTransfer(msg.sender, escrow.amount);

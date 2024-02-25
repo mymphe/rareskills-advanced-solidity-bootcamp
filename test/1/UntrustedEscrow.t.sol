@@ -58,10 +58,37 @@ contract UntrustedEscrowTest is Test {
         skip(3 days);
 
         vm.prank(bob);
+        vm.expectEmit();
+        emit Transfer(address(escrow), bob, 1 ether);
         escrow.withdraw(alice, address(token));
 
         assertEq(token.balanceOf(alice), 99 ether);
         assertEq(token.balanceOf(address(escrow)), 0);
         assertEq(token.balanceOf(bob), 1 ether);
+
+        // reverts when attempted to withdraw again
+        vm.prank(bob);
+        vm.expectRevert("Escrow does not exist or withdrawn");
+        escrow.withdraw(alice, address(token));
+    }
+
+    function test_WithdrawFailsWhenAttemptedByStranger() public {
+        test_Pay();
+
+        skip(3 days);
+
+        vm.prank(charlie);
+        vm.expectRevert("Escrow does not exist or withdrawn");
+        escrow.withdraw(alice, address(token));
+    }
+
+    function test_WithdrawFailsWhenTooEarly() public {
+        test_Pay();
+
+        skip(3 days - 1);
+
+        vm.prank(bob);
+        vm.expectRevert("Too early to withdraw");
+        escrow.withdraw(alice, address(token));
     }
 }
