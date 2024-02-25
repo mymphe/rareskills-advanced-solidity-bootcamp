@@ -31,10 +31,6 @@ contract TokenBondingCurveTest is Test {
         assertEq(token.getBuyCost(1e18), initialPrice);
     }
 
-    function test_getBuyCost() public {
-        assertEq(token.getBuyCost(1e18), initialPrice);
-    }
-
     function test_Buy() public {
         uint256 tokensToBuy = 10 ether;  
         uint256 expectedCost = 14.5 ether; // 1 + 1.1 + 1.2 + 1.3 + ... + 1.9 = 14.5
