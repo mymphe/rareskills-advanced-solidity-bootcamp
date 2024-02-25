@@ -2,6 +2,7 @@
 pragma solidity 0.8.21;
 
 import {ERC20} from "lib/openzeppelin-contracts/contracts/token/ERC20/ERC20.sol";
+import "forge-std/console.sol";
 import {ReentrancyGuard} from "lib/openzeppelin-contracts/contracts/utils/ReentrancyGuard.sol";
 
 contract TokenBondingCurve is ERC20 {
@@ -57,14 +58,17 @@ contract TokenBondingCurve is ERC20 {
         }
     }
 
-    function sell(uint256 amount, uint256 minRefund) external payable {
+    function sell(uint256 amount, uint256 minTotalSupply) external payable {
         require(balanceOf(_msgSender()) >= amount, "Not enough tokens");
+        require(totalSupply() >= minTotalSupply, "Current total supply is too low");
+
+        // this should never be false
+        assert(totalSupply() >= amount);
+
         uint256 sellCost = getSellCost(amount);
-        require(sellCost <= minRefund, "Min refund is too high");
         require(sellCost <= address(this).balance, "Not enough ether for refund");
 
         _burn(_msgSender(), amount);
-
 
         (bool success,) = payable(_msgSender()).call{value: sellCost}("");
         require(success);
