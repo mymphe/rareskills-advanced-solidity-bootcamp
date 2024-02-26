@@ -10,36 +10,31 @@ contract TokenBondingCurve is ERC20 {
     uint256 public immutable priceIncrement;
     uint256 private constant precision = 1e18;
 
-    constructor(
-        string memory name,
-        string memory symbol,
-        uint256 initialPrice_,
-        uint256 priceIncrement_
-    )
+    constructor(string memory name, string memory symbol, uint256 initialPrice_, uint256 priceIncrement_)
         ERC20(name, symbol)
     {
         initialPrice = initialPrice_;
         priceIncrement = priceIncrement_;
     }
 
-    function getPriceAt(uint256 sold) internal view returns(uint256) {
+    function getPriceAt(uint256 sold) internal view returns (uint256) {
         return initialPrice + (sold * priceIncrement / precision);
     }
 
-    function getBuyCost(uint256 amount) public view returns(uint256) {
+    function getBuyCost(uint256 amount) public view returns (uint256) {
         uint256 lowestPrice = getPriceAt(totalSupply());
         uint256 highestPrice = getPriceAt(totalSupply() + amount - 1 ether);
         uint256 average = (lowestPrice + highestPrice) / 2;
-        uint256 total  = (amount * average) / precision; 
+        uint256 total = (amount * average) / precision;
 
         return total;
     }
 
-    function getSellCost(uint256 amount) public view returns(uint256) {
+    function getSellCost(uint256 amount) public view returns (uint256) {
         uint256 highestPrice = getPriceAt(totalSupply() - 1 ether);
         uint256 lowestPrice = getPriceAt(totalSupply() - amount);
         uint256 average = (lowestPrice + highestPrice) / 2;
-        uint256 total  = (amount * average) / precision; 
+        uint256 total = (amount * average) / precision;
 
         return total;
     }

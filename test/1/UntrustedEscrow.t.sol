@@ -21,7 +21,7 @@ contract UntrustedEscrowTest is Test {
     function setUp() public {
         escrow = new UntrustedEscrow();
         token = new TokenBannable(admin, "Token", "TKN");
-        
+
         vm.prank(admin);
         token.mint(alice, 100 ether);
     }

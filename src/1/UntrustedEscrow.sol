@@ -20,8 +20,8 @@ contract UntrustedEscrow {
 
     mapping(bytes32 => Escrow) private escrows;
 
-    function getEscrow(address from, address to, address token) public view returns(Escrow memory escrow) {
-        bytes32 escrowId = keccak256(abi.encodePacked(from, to, token)); 
+    function getEscrow(address from, address to, address token) public view returns (Escrow memory escrow) {
+        bytes32 escrowId = keccak256(abi.encodePacked(from, to, token));
         escrow = escrows[escrowId];
     }
 
@@ -55,5 +55,5 @@ contract UntrustedEscrow {
         delete escrows[escrow.id];
 
         IERC20(escrow.token).safeTransfer(msg.sender, escrow.amount);
-    } 
+    }
 }

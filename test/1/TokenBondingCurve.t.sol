@@ -5,7 +5,6 @@ import {Test} from "forge-std/Test.sol";
 import "forge-std/console.sol";
 import {TokenBondingCurve} from "src/1/TokenBondingCurve.sol";
 
-
 contract TokenBondingCurveTest is Test {
     TokenBondingCurve token;
 
@@ -32,7 +31,7 @@ contract TokenBondingCurveTest is Test {
     }
 
     function test_Buy() public {
-        uint256 tokensToBuy = 10 ether;  
+        uint256 tokensToBuy = 10 ether;
         uint256 expectedCost = 14.5 ether; // 1 + 1.1 + 1.2 + 1.3 + ... + 1.9 = 14.5
 
         vm.prank(alice);
