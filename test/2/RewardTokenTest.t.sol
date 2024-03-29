@@ -12,6 +12,8 @@ contract RewardTokenTest is Test {
 
     function setUp() public {
         token = new RewardToken(alice);
+        vm.prank(alice);
+        token.setMinter(alice);
 
         vm.deal(alice, 10000 ether);
         vm.deal(bob, 10000 ether);

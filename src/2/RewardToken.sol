@@ -13,9 +13,7 @@ contract RewardToken is ERC20, Ownable2Step {
         _;
     }
 
-    constructor(address owner) ERC20("Reward Token", "RWD") Ownable(owner) {
-        minter = owner;
-    }
+    constructor(address owner) ERC20("Reward Token", "RWD") Ownable(owner) {}
 
     function mint(address to, uint256 amount) public onlyMinter {
         _mint(to, amount);
